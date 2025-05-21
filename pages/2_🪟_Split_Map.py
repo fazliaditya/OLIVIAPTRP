@@ -1,26 +1,25 @@
 import streamlit as st
-import leafmap.foliumap as leafmap
 
-st.set_page_config(layout="wide")
+# Create an empty container
+placeholder = st.empty()
 
-markdown = """
-A Streamlit map template
-<https://github.com/opengeos/streamlit-map-template>
-"""
+actual_email = "email"
+actual_password = "password"
 
-st.sidebar.title("About")
-st.sidebar.info(markdown)
-logo = "https://i.imgur.com/UbOXYAU.png"
-st.sidebar.image(logo)
+# Insert a form in the container
+with placeholder.form("login"):
+    st.markdown("#### Enter your credentials")
+    email = st.text_input("Email")
+    password = st.text_input("Password", type="password")
+    submit = st.form_submit_button("Login")
 
-st.title("Split-panel Map")
+if submit and email == actual_email and password == actual_password:
+    # If the form is submitted and the email and password are correct,
+    # clear the form/container and display a success message
+    placeholder.empty()
+    st.success("Login successful")
+elif submit and email != actual_email and password != actual_password:
+    st.error("Login failed")
+else:
+    pass
 
-with st.expander("See source code"):
-    with st.echo():
-        m = leafmap.Map()
-        m.split_map(
-            left_layer="ESA WorldCover 2020 S2 FCC", right_layer="ESA WorldCover 2020"
-        )
-        m.add_legend(title="ESA Land Cover", builtin_legend="ESA_WorldCover")
-
-m.to_streamlit(height=700)
